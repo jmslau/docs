@@ -1,0 +1,128 @@
+get:
+  tags:
+    - hapi_phone_numbers_apis
+  description: |
+    Lookup reputation or identity info about a raw phone number
+  summary: Manual Phone Lookup V2
+  operationId: v2LookupPhone
+  parameters:
+    - name: targetPhone
+      in: query
+      required: true
+      description: |
+        Unparsed raw phone number to be looked up. When possible a properly formatted e.164 phone number is preferred. Additionally, the country calling code can be separated from the rest of the phone number using a forward slash (/) to improve parsing of this field.
+        If a country calling code is not included with the request, then the system will attempt to find the best match, but will default to US-based numbers in the event that a phone number returns multiple matches.
+      example: "(425)830-3651"
+      schema:
+        type: string
+    - name: country
+      in: query
+      required: false
+      description: |
+        ISO 3166 Alpha 2 country code associated with the targetPhone. This is used as a parsing hint, especially in cases where the country code is not included in the targetPhone value.
+      example: "US"
+      schema:
+        type: string
+    - name: locale
+      in: query
+      required: false
+      description: |
+        ISO-639 Alpha 2 language code and ISO 3166 Alpha 2 country code associated with the targetPhone. This is used as a parsing hint, especially in cases where the country code is not included in the targetPhone value.
+      schema:
+        type: string
+      example: "en-US"
+    - name: mccMnc
+      in: query
+      required: false
+      description: |
+        The mobile country codes (MCC) and mobile network code (MNC) of the originating carrier. This property uses a forward slash (/) delimiter. This is a parsing hint when the targetPhone value does not include a country code.
+      schema:
+        type: string
+      example: "242/01"
+    - name: userId
+      in: query
+      required: true
+      description: |
+        A unique user identifier on your app/service (up to 80 characters). For more information, refer to the “User ID Usage” section.
+      schema:
+        type: string
+    - name: userCurrentMccMnc
+      in: query
+      required: false
+      description: |
+        The mobile country codes (MCC) and mobile network code (MNC) of the user's current carrier. This property uses a forward slash (/) delimiter.
+
+        NOTE: This is potentially different from the `userSimMccMnc` since a user might be roaming on a different network.
+
+        - ANDROID: `TelephonyManager.getNetworkOperator()`
+      schema:
+        type: string
+      example: "242/01"
+    - name: userSimMccMnc
+      in: query
+      required: false
+      schema:
+        type: string
+      description: |
+        The mobile country codes (MCC) and mobile network code (MNC) of the user's SIM carrier. This property uses a forward slash (/) delimiter.
+
+        NOTE: This is potentially different from the `userCurrentMccMnc` since a user might be roaming on a different network.
+
+        - ANDROID: `TelephonyManager.getSimOperator()`
+      example: "242/01"
+    - name: userDeviceInfo
+      in: query
+      required: false
+      schema:
+        type: string
+      description: |
+        Provides information about the user's device for analytic purposes.
+
+        - ANDROID: `Build.MANUFACTURER + "/" + Build.MODEL`
+    - name: userOsInfo
+      in: query
+      required: false
+      schema:
+        type: string
+      description: |
+        Provides information about the user's operating system for analytic purposes.
+
+        - ANDROID: `"Android" + Build.VERSION.SDK_INT + "/" + Build.VERSION.INCREMENTAL`
+    - $ref: ../components/headers/XForwardedFor.yaml
+    - $ref: ../components/headers/XHiyaProductName.yaml
+    - $ref: ../components/headers/XHiyaSubproductName.yaml
+    - $ref: ../components/headers/XHiyaAuthScopes.yaml
+  responses:
+    '200':
+      description: |
+        Phone number was parsed and PhoneProfile returned
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/V2PhoneProfileResponse.yaml
+          examples:
+            successful:
+              $ref: ../components/examples/V2PhoneProfileResponse.yaml
+      headers:
+        X-Hiya-Request-ID:
+          $ref: ../components/headers/XHiyaRequestID.yaml
+    '400':
+      $ref: ../components/responses/400.yaml
+    '401':
+      $ref: ../components/responses/401.yaml
+    '403':
+      $ref: ../components/responses/403.yaml
+    '404':
+      $ref: ../components/responses/404.yaml
+    '408':
+      $ref: ../components/responses/408.yaml
+    '410':
+      $ref: ../components/responses/410.yaml
+    '429':
+      $ref: ../components/responses/429.yaml
+    '500':
+      $ref: ../components/responses/500.yaml
+    '503':
+      $ref: ../components/responses/503.yaml
+    '504':
+      $ref: ../components/responses/504.yaml
