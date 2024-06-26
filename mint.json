@@ -15,7 +15,6 @@
       "to": "#07C983"
     }
   },
-  "openapi": ["api-reference/v2-phone_numbers.yml"],
   "topbarLinks": [
     {
       "name": "Support",
