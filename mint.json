@@ -15,6 +15,7 @@
       "to": "#07C983"
     }
   },
+  "openapi": ["api-reference/v2-phone_numbers.yml"],
   "topbarLinks": [
     {
       "name": "Support",
@@ -77,7 +78,7 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/get",
+        "api-reference/endpoint/phone_numbers",
         "api-reference/endpoint/create",
         "api-reference/endpoint/delete"
       ]
